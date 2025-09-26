@@ -38,20 +38,21 @@ public class EmployeeDaoImplJDBC implements EmployeeDao {
     public Employee findById(Integer id) {
         PreparedStatement pr = null;
         ResultSet rs = null;
-        String sql = "SELECT e.*, d.nome AS departamento_name FROM public.employee e INNER JOIN departament d ON e.departament_id = d.id WHERE e.id IN ?;";
+        String sql = "SELECT e.*, d.nome AS departamento_name FROM public.employee e INNER JOIN departament d ON e.departament_id = d.id WHERE e.id = ?;";
         try {
             pr = conn.prepareStatement(sql);
             pr.setInt(1, id);
+            rs = pr.executeQuery();
             if(rs.next()){
                 Departament dep = new Departament();
                 dep.setId(rs.getInt("departament_id"));
-                dep.setNameDepartament(rs.getNString("departamento_name"));
+                dep.setNameDepartament(rs.getString("departamento_name"));
                 Employee emp = new Employee();
                 emp.setId(rs.getInt("id"));
                 emp.setName(rs.getString("nome"));
                 emp.setEmail(rs.getString("email"));
                 emp.setDepartament(dep);
-                return  emp;
+                return emp;
             }
             return null;
 
