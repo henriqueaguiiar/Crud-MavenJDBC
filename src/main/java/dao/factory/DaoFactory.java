@@ -4,6 +4,9 @@ import dao.DepartamentDao;
 import dao.EmployeeDao;
 import dao.impl.DepartamentDaoJDBC;
 import dao.impl.EmployeeDaoImplJDBC;
+import util.DB;
+
+import java.sql.Connection;
 
 
 /**
@@ -13,7 +16,7 @@ import dao.impl.EmployeeDaoImplJDBC;
 
 public class DaoFactory {
     public static EmployeeDao criarEmployeeDaoImpl(){
-        return new EmployeeDaoImplJDBC();
+        return new EmployeeDaoImplJDBC(DB.getConnection());
     }
 
     public static DepartamentDao criarDepartamentDaoImpl(){
