@@ -18,7 +18,7 @@ public class Program {
 
         Employee emp1 = emp.findById(1);
 
-        System.out.println(emp1);
+        System.out.println("Result: " + emp1);
 
         DB.closeConnection();
 
