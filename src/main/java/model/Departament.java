@@ -13,8 +13,7 @@ public class Departament implements Serializable {
     public Departament() {
     }
 
-    public Departament(Integer id, String nameDepartament) {
-        this.id = id;
+    public Departament(String nameDepartament) {
         this.nameDepartament = nameDepartament;
     }
 

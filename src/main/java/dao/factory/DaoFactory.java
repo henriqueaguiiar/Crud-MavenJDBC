@@ -2,11 +2,9 @@ package dao.factory;
 
 import dao.DepartamentDao;
 import dao.EmployeeDao;
-import dao.impl.DepartamentDaoJDBC;
+import dao.impl.DepartamentDaoImplJDBC;
 import dao.impl.EmployeeDaoImplJDBC;
 import util.DB;
-
-import java.sql.Connection;
 
 
 /**
@@ -20,7 +18,7 @@ public class DaoFactory {
     }
 
     public static DepartamentDao criarDepartamentDaoImpl(){
-        return new DepartamentDaoJDBC();
+        return  new DepartamentDaoImplJDBC(DB.getConnection());
     }
 
 }
