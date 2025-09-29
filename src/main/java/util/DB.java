@@ -1,6 +1,6 @@
 package util;
 
-import exceptions.jdbc.DbExceprion;
+import exceptions.jdbc.DbException;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class DB {
                 conn = DriverManager.getConnection(url, props);
             }
             catch (SQLException e){
-                throw new DbExceprion(e.getMessage());
+                throw new DbException(e.getMessage());
             }
         }
 
@@ -49,7 +49,7 @@ public class DB {
             }
         }
         catch (SQLException e){
-            throw new DbExceprion(e.getMessage());
+            throw new DbException(e.getMessage());
         }
 
     }
@@ -68,7 +68,7 @@ public class DB {
             return props;
         }
         catch (IOException e){
-            throw new DbExceprion(e.getMessage());
+            throw new DbException(e.getMessage());
         }
     }
 }

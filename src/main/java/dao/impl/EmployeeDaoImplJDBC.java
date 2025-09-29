@@ -1,7 +1,7 @@
 package dao.impl;
 
 import dao.EmployeeDao;
-import exceptions.jdbc.DbExceprion;
+import exceptions.jdbc.DbException;
 import model.Departament;
 import model.Employee;
 
@@ -24,17 +24,42 @@ public class EmployeeDaoImplJDBC implements EmployeeDao {
 
     @Override
     public void create(Employee employee) {
+        String sql = "INSERT INTO public.employee (nome, email, departament_id) VALUES(?, ?, ?);";
+        try(PreparedStatement pr = conn.prepareStatement(sql); ){
+            pr.setString(1, employee.getName());
+            pr.setString(2, employee.getEmail());
+            pr.setInt(3, employee.getDepartament().getId());
+            pr.executeUpdate();
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
 
     }
 
     @Override
     public void update(Employee employee) {
-
+        String sql = "UPDATE public.employee SET nome=?, email=?, departament_id=? WHERE id=?;";
+        try(PreparedStatement pr = conn.prepareStatement(sql); ){
+            pr.setString(1, employee.getName());
+            pr.setString(2, employee.getEmail());
+            pr.setInt(3, employee.getDepartament().getId());
+            pr.setInt(4, employee.getId());
+            pr.executeUpdate();
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
     }
 
     @Override
     public void deleteById(Integer id) {
-
+        String sql = "DELETE FROM public.employee WHERE id=?;";
+        try(PreparedStatement pr = conn.prepareStatement(sql)){
+            pr.setInt(1, id);
+            pr.executeUpdate();
+        }
+        catch (SQLException e){
+            throw new DbException(e.getMessage());
+        }
     }
 
     @Override
@@ -54,14 +79,41 @@ public class EmployeeDaoImplJDBC implements EmployeeDao {
             return null;
 
         } catch (SQLException e) {
-            throw new DbExceprion(e.getMessage());
+            throw new DbException(e.getMessage());
         }
     }
 
 
     @Override
     public List<Employee> findAll() {
-        return List.of();
+        PreparedStatement pr = null;
+        ResultSet rs = null;
+
+        String sql = "SELECT e.*, d.nome AS departamento_name FROM public.employee e INNER JOIN departament d ON e.departament_id = d.id  order by e.nome;";
+        try {
+            pr = conn.prepareStatement(sql);
+            rs = pr.executeQuery();
+
+            List<Employee> list = new ArrayList<>();
+
+            Map<Integer, Departament> map = new HashMap<>();
+
+            while(rs.next()){
+
+                Departament dep = map.get(rs.getInt("departament_id"));
+
+                if(dep == null){
+                    dep = instantiateDepartament(rs);
+                    map.put(rs.getInt("departament_id"), dep);
+                }
+                Employee emp = instantiateEmployee(rs, dep);
+                list.add(emp);
+            }
+            return list;
+
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
     }
 
     @Override
@@ -92,7 +144,7 @@ public class EmployeeDaoImplJDBC implements EmployeeDao {
             return list;
 
         } catch (SQLException e) {
-            throw new DbExceprion(e.getMessage());
+            throw new DbException(e.getMessage());
         }
     }
 
