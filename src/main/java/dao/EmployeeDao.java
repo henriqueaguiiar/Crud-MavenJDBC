@@ -1,6 +1,7 @@
 package dao;
 
 
+import model.Departament;
 import model.Employee;
 
 import java.util.List;
@@ -21,4 +22,5 @@ public interface EmployeeDao {
 
     List<Employee> findAll();
 
+    List<Employee> findByDepartament(Departament departament);
 }
