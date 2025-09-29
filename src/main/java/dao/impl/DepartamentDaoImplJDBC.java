@@ -12,7 +12,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DepartamentDaoImplJDBC implements DepartamentDao {
-    private Connection conn = DB.getConnection();
+
+    private Connection conn;
+
+    public DepartamentDaoImplJDBC(Connection conn){
+        this.conn = conn;
+    }
 
     @Override
     public Departament findById(Integer id) {
@@ -48,8 +53,8 @@ public class DepartamentDaoImplJDBC implements DepartamentDao {
 
     private Departament instantiateDepartament(ResultSet rs) throws SQLException {
         Departament dep = new  Departament();
-        dep.setId(rs.getInt("departament_id"));
-        dep.setNameDepartament(rs.getString("departamento_name"));
+        dep.setId(rs.getInt("id"));
+        dep.setNameDepartament(rs.getString("nome"));
         return dep;
     }
 

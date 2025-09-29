@@ -1,5 +1,6 @@
 package application;
 
+import dao.DepartamentDao;
 import dao.EmployeeDao;
 import dao.factory.DaoFactory;
 import dao.impl.EmployeeDaoImplJDBC;
@@ -16,6 +17,8 @@ public class Program {
         Scanner input = new Scanner(System.in);
         Connection conn = DB.getConnection();
         EmployeeDao emp = DaoFactory.criarEmployeeDaoImpl();
+        DepartamentDao dep = DaoFactory.criarDepartamentDaoImpl();
+
         int opcao, departamentId;
         String nome, email;
 
@@ -32,20 +35,23 @@ public class Program {
                     System.out.print("Escolha uma opção: ");
 
                      opcao = input.nextInt();
-
+                    input.nextLine();
                     switch (opcao) {
                         case 1:
                             System.out.println("Executando Create...");
                             System.out.print("Name: ");
-                             nome = input.nextLine();
+                            nome = input.nextLine();
                             System.out.print("Email: ");
                             email = input.nextLine();
                             System.out.print("Departament Id: ");
-                            departament = input.nextInt();
+                            departamentId = input.nextInt();
                             input.nextLine();
 
-                            Employee employee = new Employee(nome, email, departament);
-                            emp.create(employee);
+                            Departament dep1 = dep.findById(departamentId);
+                            if(dep1.getId() != null){
+                                Employee employee = new Employee(nome, email, dep1);
+                                emp.create(employee);
+                            }
                             break;
                         case 2:
                             System.out.println("Executando Update...");
